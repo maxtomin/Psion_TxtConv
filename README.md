@@ -1,5 +1,5 @@
 # Psion_TxtConv
-This is a tool for Psion PDA I developed in year 2002.
+This is a tool for Psion PDA I developed in 2003-ish.
 I have uploaded it after multiple people expressed interest in it, probably for the purpose of software archaeology.
 
 There is a readme file in Russian here:
