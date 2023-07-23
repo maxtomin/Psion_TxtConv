@@ -1,0 +1,448 @@
+// IKHELLO2.RSS
+//
+// Copyright (c) 1997-1999 Symbian Ltd.  All rights reserved.
+//
+
+NAME IKH2
+
+#include <eikdef.rh>
+#include <eiktbar.rh>
+#include <eikmenu.rh>
+#include <eikctrls.hrh>
+#include <eikspace.rh>
+#include <eikclock.rh>
+#include <eikon.rsg>
+#include <eikdialg.rh>
+#include <eikedwin.rh>
+#include <eiklabel.rh>
+#include <eikchlst.rh>
+#include <eikprogi.rh>
+
+
+#include "TextConverter.hrh"
+
+RESOURCE RSS_SIGNATURE { }
+
+RESOURCE TBUF { buf=""; }
+
+RESOURCE EIK_APP_INFO
+	{
+	menubar=r_example_menubar;
+	hotkeys=r_example_hotkeys;
+	toolbar=r_example_toolbar;
+	}
+
+RESOURCE TOOLBAR r_example_toolbar
+    {
+    controls=
+		{
+		TBAR_CTRL
+			{
+			id=EExampleCmdFileName;
+			type=EEikCtFileNameLabel;
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdFileNameLabelHeight;
+			},
+		TBAR_BUTTON
+			{
+			id=ECmdConvertText;
+			txt="Convert";
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdToolBarButtonHeight;
+			},
+		TBAR_BUTTON
+			{
+			id=ECmdConvertTextDebug;
+			txt="Debug";
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdToolBarButtonHeight;
+			},
+		TBAR_BUTTON
+			{
+			id=ECmdRulesetOptions;
+			txt="Options";
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdToolBarButtonHeight;
+			},
+		TBAR_BUTTON
+			{
+			id=EEikCmdExit;
+			txt="Exit";
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdToolBarButtonHeight;
+			},
+		TBAR_CTRL
+			{
+			type=EEikCtSpacer;
+			flags=EEikToolBarCtrlHasSetMinLength|EEikToolBarCtrlIsStretchable;
+			length=0;
+			control=SPACER;
+			},
+		TBAR_CTRL
+			{
+			type=EEikCtClock;
+			control=CLOCK { digitalresourceid=R_EIK_DIGITAL_CLOCK; analogresourceid=R_EIK_ANALOG_CLOCK; };
+			},
+		TBAR_CTRL
+			{
+			type=EEikCtSpacer;
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdGapBelowClock;
+			control=SPACER;
+			}
+		};
+    }
+
+RESOURCE HOTKEYS r_example_hotkeys
+    {
+    control=
+        {
+        HOTKEY { command=EEikCmdExit; key='e'; },
+        HOTKEY { command=ECmdAddRule; key='a'; },
+        HOTKEY { command=ECmdInsertRule; key='i'; },
+        HOTKEY { command=ECmdConvertTextDebug; key='d'; },
+        HOTKEY { command=ECmdMoveRuleDown; key='m'; },
+        HOTKEY { command=ECmdRulesetOptions; key='k'; },
+
+	HOTKEY { command=EEikCmdFileNew; key='n'; },
+	HOTKEY { command=EEikCmdFileOpen; key='o'; },
+	HOTKEY { command=EEikCmdFileSave; key='s'; },
+	HOTKEY { command=EEikCmdFileRevert; key='r'; },
+	HOTKEY { command=ECmdConvertText; key='c'; }
+        };
+    shift_control=
+        {
+        HOTKEY { command=ECmdMoveRuleUp; key='m'; },
+		HOTKEY { command=EEikCmdFileSaveAs; key='s'; }
+        };
+    }
+
+RESOURCE MENU_BAR r_example_menubar
+    {
+    titles=
+        {
+        MENU_TITLE { menu_pane=r_example_file_menu; txt="File"; },
+        MENU_TITLE { menu_pane=r_example_rule_menu; txt="Rule"; },
+        MENU_TITLE { menu_pane=r_example_tools_menu; txt="Tools"; }
+	};
+    }
+
+RESOURCE MENU_PANE r_example_file_menu
+    {
+	items=
+		{
+		MENU_ITEM { command=EEikCmdFileNew; txt="Create new file..."; },
+		MENU_ITEM { command=EEikCmdFileOpen; txt="Open file..."; },
+		MENU_ITEM { cascade=r_example_more_submenu; txt="More"; },
+		MENU_ITEM { command=EEikCmdExit; txt="Close"; }
+        };
+    }
+
+RESOURCE MENU_PANE r_example_more_submenu
+	{
+	items=
+		{
+		MENU_ITEM { command=EEikCmdFileSaveAs; txt="Save as..."; },
+		MENU_ITEM { command=EEikCmdFileSave; txt="Save"; },
+		MENU_ITEM { command=EEikCmdFileRevert; txt="Revert to saved"; }
+        };
+	}
+
+RESOURCE MENU_PANE r_example_rule_menu
+    {
+	items=
+	{
+		MENU_ITEM { command=ECmdAddRule; txt="Add"; },
+		MENU_ITEM { command=ECmdInsertRule; txt="Insert"; },
+		MENU_ITEM { command=ECmdEditRule; txt="Edit"; extratxt="Enter"; },
+		MENU_ITEM { command=ECmdDeleteRule; txt="Delete"; extratxt="Del"; },
+		MENU_ITEM { command=ECmdMoveRuleUp; txt="Move up"; },
+		MENU_ITEM { command=ECmdMoveRuleDown; txt="Move down"; }
+        };
+    }
+
+RESOURCE MENU_PANE r_example_tools_menu
+    {
+	items=
+	{
+		MENU_ITEM { command=ECmdConvertText; txt="Convert text..."; },
+		MENU_ITEM { command=ECmdConvertTextDebug; txt="Debug..."; },
+		MENU_ITEM { command=ECmdRulesetOptions; txt="Ruleset options..."; }
+        };
+    }
+
+RESOURCE DIALOG r_rule_edit
+	{
+	title="Edit rule";
+	buttons=R_EIK_BUTTONS_CANCEL_OK;
+	flags=EEikDialogFlagButtonsBelow|EEikDialogFlagWait;
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			itemflags=EEikDlgItemSeparatorAfter;
+			prompt="Rule name";
+			id=EEdwinRuleName;
+			control=EDWIN
+				{
+					width=25;
+					maxlength=64;
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			prompt="Serach for";
+			id=EEdwinSearchFor;
+			control=EDWIN
+				{
+					width=25;
+					maxlength=64;
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			prompt="Replace with";
+			id=EEdwinReplaceWith;
+			control=EDWIN
+				{
+					width=25;
+					maxlength=64;
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtCheckBox;
+			prompt="Match whole word";
+			id=ECheckBoxMatchWholeWord;
+			},
+		DLG_LINE
+			{
+			type=EEikCtCheckBox;
+			prompt="Case sensitive";
+			id=ECheckBoxCaseSensitive;
+			},
+		DLG_LINE
+			{
+			type=EEikCtCheckBox;
+			prompt="Do while possible";
+			id=ECheckBoxDoWhilePossible;
+			}
+		};
+	}
+
+
+RESOURCE DIALOG r_ruleset_options
+	{
+	title="Ruleset options";
+	buttons=R_EIK_BUTTONS_CANCEL_OK;
+	flags=EEikDialogFlagButtonsBelow|EEikDialogFlagWait;
+	pages= r_ruleset_options_pages;
+	}
+
+RESOURCE ARRAY r_ruleset_options_pages 
+	{
+	items = 
+		{
+		PAGE
+			{
+			text="Description";
+			lines= r_ruleset_description_page_lines;
+			},
+		PAGE
+			{
+			text="Pre-processing";
+			lines= r_ruleset_preproc_page_lines;
+			},
+		PAGE
+			{
+			text="Post-processing";
+			lines=r_ruleset_postproc_page_lines;
+			}
+		};
+	}
+
+RESOURCE ARRAY r_ruleset_description_page_lines
+	{
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtLabel;
+			control=LABEL
+				{
+				horiz_align=EEikLabelAlignHLeft;
+				txt="Description";
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			id=EEdwinRulesetDescription;
+			control=EDWIN
+				{
+				width=25;
+  			maxlength=128;
+				lines=4;
+				};
+			}
+		};
+	}
+
+RESOURCE ARRAY r_ruleset_preproc_page_lines
+	{
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtChoiceList;
+			prompt="In encoding";
+			id=EChoiceListInEncoding;
+			control=CHOICELIST { array_id=r_encoding_names; };
+			},
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			prompt="Trim head until";
+			id=EEdwinTrimTo;
+			control=EDWIN
+				{
+					width=25;
+					maxlength=64;
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			prompt="Trim tail from";
+			id=EEdwinTrimFrom;
+			control=EDWIN
+				{
+					width=25;
+					maxlength=64;
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtCheckBox;
+			id=ECheckBoxParseHTML;
+			prompt="Parse HTML";
+			}
+		};
+	}
+
+
+RESOURCE ARRAY r_ruleset_postproc_page_lines
+	{
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtChoiceList;
+			prompt="Out encoding";
+			id=EChoiceListOutEncoding;
+			control=CHOICELIST { array_id=r_encoding_names; };
+			},
+		DLG_LINE
+			{
+			type=EEikCtCheckBox;
+			id=ECheckBoxConvertToTCR;
+			prompt="Convert to TCR";
+			}
+		};
+	}
+
+RESOURCE ARRAY r_encoding_names
+	{
+	items=
+		{
+		LBUF { txt="<Auto>"; },
+		LBUF { txt="Win-1251"; },
+		LBUF { txt="KOI-8"; },
+		LBUF { txt="DOS (866)"; },
+		LBUF { txt="UTF-8"; }
+		};
+	}
+RESOURCE TBUF r_revert_title { buf="Revert to saved?"; }
+RESOURCE TBUF r_revert_text { buf="All changes will be lost"; }
+RESOURCE TBUF r_document_unchanged { buf="File has not changed"; }
+RESOURCE TBUF r_document_saved { buf="File saved"; }
+RESOURCE TBUF r_convertion_complete { buf="Convertion complete"; }
+RESOURCE TBUF r_convertion_cancelled { buf="Convertion cancelled"; }
+
+RESOURCE TBUF r_parsing_html { buf="Parsing HTML..."; }
+RESOURCE TBUF r_copying_to_out { buf="Copying to output file..."; }
+RESOURCE TBUF r_get_encoding { buf="Revealing encoding type..."; }
+RESOURCE TBUF r_set_encoding { buf="Changing input encoding..."; }
+RESOURCE TBUF r_set_out_encoding { buf="Changing output encoding..."; }
+RESOURCE TBUF r_trim_text { buf="Trimming text..."; }
+RESOURCE TBUF r_applying_rule_template { buf="Applying rule %d, pass %d..."; }
+RESOURCE TBUF r_compressing_tcr { buf="TCR compressing..."; }
+RESOURCE TBUF r_select_source_title { buf="Select source file"; }
+RESOURCE TBUF r_select_dest_title { buf="Select destination file"; }
+RESOURCE TBUF r_select_debug_title { buf="Select debug file"; }
+RESOURCE TBUF r_in_out_similar { buf="Input and output paths can not be similar!"; }
+RESOURCE TBUF r_in_debug_similar { buf="Input and debug paths can not be similar!"; }
+RESOURCE TBUF r_out_debug_similar { buf="Output and debug paths can not be similar!"; }
+RESOURCE TBUF r_error_title { buf="Error"; }
+
+RESOURCE DIALOG r_progress_dialog
+	{
+	title="Applying ruleset";
+	buttons=R_EIK_BUTTONS_CANCEL;
+	flags=EEikDialogFlagButtonsBelow|EEikDialogFlagNotifyEsc;
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtLabel;
+			id=EProgressLabel;
+			control=LABEL
+				{
+					txt="Initilazing...";
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtProgInfo;
+			id=EProgressBar;
+			control=PROGRESSINFO
+			  {
+        	finalval=100;
+          width=320;
+			  };
+			}
+		};
+	}
+
+  RESOURCE DIALOG r_progress_debug_dialog
+	{
+	title="Applying ruleset";
+	buttons=R_EIK_BUTTONS_CANCEL_OK;
+	flags=EEikDialogFlagButtonsBelow|EEikDialogFlagNotifyEsc;
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtLabel;
+			id=EProgressLabel;
+			control=LABEL
+				{
+					txt="Initilazing...";
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtProgInfo;
+			id=EProgressBar;
+			control=PROGRESSINFO
+			  {
+        	finalval=100;
+          width=320;
+			  };
+			}
+		};
+	}
+

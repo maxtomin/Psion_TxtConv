@@ -1,0 +1,13 @@
+&EN,RU
+#{"Text Converter","Text Converter"},(0x101F7998),1,10,0
+"\psiconv\TextConverter\TxtConv.app"-"!:\system\apps\TxtConv\TxtConv.app"
+"\psiconv\TextConverter\aif\TextConverter.aif"-"!:\system\apps\TxtConv\TxtConv.aif"
+"\psiconv\TextConverter\temp.txt"-"C:\system\temp\TxtConv\temp.txt"
+{
+    "\psiconv\TextConverter\TextConverter_eng.rsc"
+    "\psiconv\TextConverter\TextConverter_rus.rsc"
+}-"!:\system\apps\TxtConv\TxtConv.rsc"
+
+""-"C:\system\apps\TxtConv\TxtConv.ini",FN
+""-"C:\system\apps\TxtConv\",FN
+

@@ -1,0 +1,96 @@
+// TextConverter.MMP
+target          TextConverter.APP
+targettype      APP
+uid		    0x1000006C 0x101F7998
+unicodeuid	    0X1000006c 0x101F7999
+TARGETPATH      \system\apps\TextConverter
+project         psiconv
+subproject	    TextConverter
+userinclude	    .
+systeminclude   \EPOC32\INCLUDE
+
+SOURCE ApplyRule.cpp
+// End Source File
+// Begin Source File
+
+SOURCE ConverterActive.cpp
+// End Source File
+// Begin Source File
+
+SOURCE CopyToOutConvertion.cpp
+// End Source File
+// Begin Source File
+
+SOURCE FileInterface.cpp
+// End Source File
+// Begin Source File
+
+SOURCE FileReader.cpp
+// End Source File
+// Begin Source File
+
+SOURCE FileWriter.cpp
+// End Source File
+// Begin Source File
+
+SOURCE FreqInfo.cpp
+// End Source File
+// Begin Source File
+
+SOURCE GetEncoding.cpp
+// End Source File
+// Begin Source File
+
+SOURCE ParseHtmlConvertion.cpp
+// End Source File
+// Begin Source File
+
+SOURCE ProgressBarActive.cpp
+// End Source File
+// Begin Source File
+
+SOURCE ProgressDialog.cpp
+// End Source File
+// Begin Source File
+
+SOURCE ReplaceRule.cpp
+// End Source File
+// Begin Source File
+
+SOURCE RFileWithCleanup.cpp
+// End Source File
+// Begin Source File
+
+SOURCE RuleEditDialog.cpp
+// End Source File
+// Begin Source File
+
+SOURCE RulesetOptions.cpp
+// End Source File
+// Begin Source File
+
+SOURCE RulesetOptionsDialog.cpp
+// End Source File
+// Begin Source File
+
+SOURCE TcrCompressor.cpp
+// End Source File
+// Begin Source File
+
+SOURCE TextConversion.cpp
+// End Source File
+// Begin Source File
+
+SOURCE Textconverter.cpp
+// End Source File
+// Begin Source File
+
+SOURCE TrimHeadTail.cpp
+// End Source File
+// End Group
+SOURCE CompressTcr.cpp
+SOURCE Utf2Win.cpp
+
+//source 	        Converter.cpp FileInterface.cpp FileReader.cpp FileWriter.cpp FreqInfo.cpp ReplaceRule.cpp RFileWithCleanup.cpp  RuleEditDialog.cpp RulesetOptions.cpp RulesetOptionsDialog.cpp TcrCompressor.cpp TextConverter.cpp
+resource        TextConverter.rss
+library         euser.lib cone.lib eikon.lib apparc.lib estor.lib efsrv.lib

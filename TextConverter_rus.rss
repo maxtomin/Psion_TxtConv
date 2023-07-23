@@ -1,0 +1,442 @@
+// IKHELLO2.RSS
+//
+// Copyright (c) 1997-1999 Symbian Ltd.  All rights reserved.
+//
+
+NAME IKH2
+
+#include <eikdef.rh>
+#include <eiktbar.rh>
+#include <eikmenu.rh>
+#include <eikctrls.hrh>
+#include <eikspace.rh>
+#include <eikclock.rh>
+#include <eikon.rsg>
+#include <eikdialg.rh>
+#include <eikedwin.rh>
+#include <eiklabel.rh>
+#include <eikchlst.rh>
+#include <eikprogi.rh>
+
+
+#include "TextConverter.hrh"
+
+RESOURCE RSS_SIGNATURE { }
+
+RESOURCE TBUF { buf=""; }
+
+RESOURCE EIK_APP_INFO
+	{
+	menubar=r_example_menubar;
+	hotkeys=r_example_hotkeys;
+	toolbar=r_example_toolbar;
+	}
+
+RESOURCE TOOLBAR r_example_toolbar
+    {
+    controls=
+		{
+		TBAR_CTRL
+			{
+			id=EExampleCmdFileName;
+			type=EEikCtFileNameLabel;
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdFileNameLabelHeight;
+			},
+		TBAR_BUTTON
+			{
+			id=ECmdConvertText;
+			txt="Запуск";
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdToolBarButtonHeight;
+			},
+		TBAR_BUTTON
+			{
+			id=ECmdConvertTextDebug;
+			txt="Отладка";
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdToolBarButtonHeight;
+			},
+		TBAR_BUTTON
+			{
+			id=ECmdRulesetOptions;
+			txt="Опции";
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdToolBarButtonHeight;
+			},
+		TBAR_BUTTON
+			{
+			id=EEikCmdExit;
+			txt="Выход";
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdToolBarButtonHeight;
+			},
+		TBAR_CTRL
+			{
+			type=EEikCtSpacer;
+			flags=EEikToolBarCtrlHasSetMinLength|EEikToolBarCtrlIsStretchable;
+			length=0;
+			control=SPACER;
+			},
+		TBAR_CTRL
+			{
+			type=EEikCtClock;
+			control=CLOCK { digitalresourceid=R_EIK_DIGITAL_CLOCK; analogresourceid=R_EIK_ANALOG_CLOCK; };
+			},
+		TBAR_CTRL
+			{
+			type=EEikCtSpacer;
+			flags=EEikToolBarCtrlHasSetMinLength;
+			length=KEikStdGapBelowClock;
+			control=SPACER;
+			}
+		};
+    }
+
+RESOURCE HOTKEYS r_example_hotkeys
+    {
+    control=
+        {
+        HOTKEY { command=EEikCmdExit; key='e'; },
+        HOTKEY { command=ECmdAddRule; key='a'; },
+        HOTKEY { command=ECmdInsertRule; key='i'; },
+        HOTKEY { command=ECmdConvertTextDebug; key='d'; },
+        HOTKEY { command=ECmdMoveRuleDown; key='m'; },
+        HOTKEY { command=ECmdRulesetOptions; key='k'; },
+
+	HOTKEY { command=EEikCmdFileNew; key='n'; },
+	HOTKEY { command=EEikCmdFileOpen; key='o'; },
+	HOTKEY { command=EEikCmdFileSave; key='s'; },
+	HOTKEY { command=EEikCmdFileRevert; key='r'; },
+	HOTKEY { command=ECmdConvertText; key='c'; }
+        };
+    shift_control=
+        {
+        HOTKEY { command=ECmdMoveRuleUp; key='m'; },
+		HOTKEY { command=EEikCmdFileSaveAs; key='s'; }
+        };
+    }
+
+RESOURCE MENU_BAR r_example_menubar
+    {
+    titles=
+        {
+        MENU_TITLE { menu_pane=r_example_file_menu; txt="Файл"; },
+        MENU_TITLE { menu_pane=r_example_rule_menu; txt="Правило"; },
+        MENU_TITLE { menu_pane=r_example_tools_menu; txt="Действия"; }
+	};
+    }
+
+RESOURCE MENU_PANE r_example_file_menu
+    {
+	items=
+		{
+		MENU_ITEM { command=EEikCmdFileNew; txt="Создать файл..."; },
+		MENU_ITEM { command=EEikCmdFileOpen; txt="Открыть файл..."; },
+		MENU_ITEM { cascade=r_example_more_submenu; txt="Другое"; },
+		MENU_ITEM { command=EEikCmdExit; txt="Выход"; }
+        };
+    }
+
+RESOURCE MENU_PANE r_example_more_submenu
+	{
+	items=
+		{
+		MENU_ITEM { command=EEikCmdFileSaveAs; txt="Сохранить как..."; },
+		MENU_ITEM { command=EEikCmdFileSave; txt="Сохранить"; },
+		MENU_ITEM { command=EEikCmdFileRevert; txt="Вернуться к сохраненному"; }
+        };
+	}
+
+RESOURCE MENU_PANE r_example_rule_menu
+    {
+	items=
+	{
+		MENU_ITEM { command=ECmdAddRule; txt="Добавить"; },
+		MENU_ITEM { command=ECmdInsertRule; txt="Вставить"; },
+		MENU_ITEM { command=ECmdEditRule; txt="Изменить"; extratxt="Enter"; },
+		MENU_ITEM { command=ECmdDeleteRule; txt="Удалить"; extratxt="Del"; },
+		MENU_ITEM { command=ECmdMoveRuleUp; txt="Сдвинуть вверх"; },
+		MENU_ITEM { command=ECmdMoveRuleDown; txt="Сдвинуть вниз"; }
+        };
+    }
+
+RESOURCE MENU_PANE r_example_tools_menu
+    {
+	items=
+	{
+		MENU_ITEM { command=ECmdConvertText; txt="Запуск..."; },
+		MENU_ITEM { command=ECmdConvertTextDebug; txt="Отладка..."; },
+		MENU_ITEM { command=ECmdRulesetOptions; txt="Опции..."; }
+        };
+    }
+
+RESOURCE DIALOG r_rule_edit
+	{
+	title="Изменение правила";
+	buttons=R_EIK_BUTTONS_CANCEL_OK;
+	flags=EEikDialogFlagButtonsBelow|EEikDialogFlagWait;
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			itemflags=EEikDlgItemSeparatorAfter;
+			prompt="Имя правила";
+			id=EEdwinRuleName;
+			control=EDWIN
+				{
+					width=25;
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			prompt="Найти";
+			id=EEdwinSearchFor;
+			control=EDWIN
+				{
+					width=25;
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			prompt="Заменить";
+			id=EEdwinReplaceWith;
+			control=EDWIN
+				{
+					width=25;
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtCheckBox;
+			prompt="Только слово целиком";
+			id=ECheckBoxMatchWholeWord;
+			},
+		DLG_LINE
+			{
+			type=EEikCtCheckBox;
+			prompt="С учетом регистра";
+			id=ECheckBoxCaseSensitive;
+			},
+		DLG_LINE
+			{
+			type=EEikCtCheckBox;
+			prompt="Повторять пока возможно";
+			id=ECheckBoxDoWhilePossible;
+			}
+		};
+	}
+
+
+RESOURCE DIALOG r_ruleset_options
+	{
+	title="Параметры набора правил";
+	buttons=R_EIK_BUTTONS_CANCEL_OK;
+	flags=EEikDialogFlagButtonsBelow|EEikDialogFlagWait;
+	pages= r_ruleset_options_pages;
+	}
+
+RESOURCE ARRAY r_ruleset_options_pages
+	{
+	items =
+		{
+		PAGE
+			{
+			text="Описание";
+			lines= r_ruleset_description_page_lines;
+			},
+		PAGE
+			{
+			text="Начало обработки";
+			lines= r_ruleset_preproc_page_lines;
+			},
+		PAGE
+			{
+			text="Конец обработки";
+			lines=r_ruleset_postproc_page_lines;
+			}
+		};
+	}
+
+RESOURCE ARRAY r_ruleset_description_page_lines
+	{
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtLabel;
+			control=LABEL
+				{
+				horiz_align=EEikLabelAlignHLeft;
+				txt="Описание";
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			id=EEdwinRulesetDescription;
+			control=EDWIN
+				{
+				width=25;
+				lines=4;
+				};
+			}
+		};
+	}
+
+RESOURCE ARRAY r_ruleset_preproc_page_lines
+	{
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtChoiceList;
+			prompt="Кодировка";
+			id=EChoiceListEncoding;
+			control=CHOICELIST { array_id=r_encoding_names; };
+			},
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			prompt="Обрезать до";
+			id=EEdwinTrimTo;
+			control=EDWIN
+				{
+					width=25;
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtEdwin;
+			prompt="Обрезать с";
+			id=EEdwinTrimFrom;
+			control=EDWIN
+				{
+					width=25;
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtCheckBox;
+			id=ECheckBoxParseHTML;
+			prompt="Обработать HTML";
+			}
+		};
+	}
+
+
+RESOURCE ARRAY r_ruleset_postproc_page_lines
+	{
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtChoiceList;
+			prompt="Вых. кодировка";
+			id=EChoiceListOutEncoding;
+			control=CHOICELIST { array_id=r_encoding_names; };
+			},
+		DLG_LINE
+			{
+			type=EEikCtCheckBox;
+			id=ECheckBoxConvertToTCR;
+			prompt="Конвертировать в TCR";
+			}
+		};
+	}
+
+RESOURCE ARRAY r_encoding_names
+	{
+	items=
+		{
+		LBUF { txt="<Авто>"; },
+		LBUF { txt="Win-1251"; },
+		LBUF { txt="KOI-8"; },
+		LBUF { txt="DOS (866)"; },
+		LBUF { txt="UTF-8"; }
+		};
+	}
+RESOURCE TBUF r_revert_title { buf="Вернуться к сохраненному?"; }
+RESOURCE TBUF r_revert_text { buf="Изменение будут потеряны"; }
+RESOURCE TBUF r_document_unchanged { buf="Файл не изменялся"; }
+RESOURCE TBUF r_document_saved { buf="Файл сохранен"; }
+RESOURCE TBUF r_convertion_complete { buf="Конвертирование окончено"; }
+RESOURCE TBUF r_convertion_cancelled { buf="Конвертирование отменено"; }
+
+RESOURCE TBUF r_parsing_html { buf="Обработка HTML..."; }
+RESOURCE TBUF r_copying_to_out { buf="Копирование в выходной файл..."; }
+RESOURCE TBUF r_get_encoding { buf="Выяснение типа кодировки..."; }
+RESOURCE TBUF r_set_encoding { buf="Изменение входной кодировки..."; }
+RESOURCE TBUF r_set_encoding { buf="Изменение выходной кодировки..."; }
+RESOURCE TBUF r_trim_text { buf="Обрезка текста..."; }
+RESOURCE TBUF r_applying_rule_template { buf="Применение правила %d, проход %d..."; }
+RESOURCE TBUF r_compressing_tcr { buf="Сжатие в TCR..."; }
+RESOURCE TBUF r_select_source_title { buf="Выберите исходный файл"; }
+RESOURCE TBUF r_select_dest_title { buf="Выберите получаемый файл"; }
+RESOURCE TBUF r_select_debug_title { buf="Выберите отладочный файл"; }
+RESOURCE TBUF r_in_out_similar { buf="Имена входного и выходного файла не могут совпадать!"; }
+RESOURCE TBUF r_in_debug_similar { buf="Имена входного и отладочного файла не могут совпадать!"; }
+RESOURCE TBUF r_out_debug_similar { buf="Имена выходного и отладочного файла не могут совпадать!"; }
+RESOURCE TBUF r_error_title { buf="Ошибка"; }
+
+RESOURCE DIALOG r_progress_dialog
+	{
+	title="Применение набора правил";
+	buttons=R_EIK_BUTTONS_CANCEL;
+	flags=EEikDialogFlagButtonsBelow|EEikDialogFlagNotifyEsc;
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtLabel;
+			id=EProgressLabel;
+			control=LABEL
+				{
+					txt="Инициализация...";
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtProgInfo;
+			id=EProgressBar;
+			control=PROGRESSINFO
+			  {
+        	finalval=100;
+          width=320;
+			  };
+			}
+		};
+	}
+
+  RESOURCE DIALOG r_progress_debug_dialog
+	{
+	title="Применение набора правил (режим отладки)";
+	buttons=R_EIK_BUTTONS_CANCEL_OK;
+	flags=EEikDialogFlagButtonsBelow|EEikDialogFlagNotifyEsc;
+	items=
+		{
+		DLG_LINE
+			{
+			type=EEikCtLabel;
+			id=EProgressLabel;
+			control=LABEL
+				{
+					txt="Инициализация...";
+				};
+			},
+		DLG_LINE
+			{
+			type=EEikCtProgInfo;
+			id=EProgressBar;
+			control=PROGRESSINFO
+			  {
+        	finalval=100;
+          width=320;
+			  };
+			}
+		};
+	}
+

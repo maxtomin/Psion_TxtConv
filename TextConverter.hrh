@@ -1,0 +1,41 @@
+// IKHELLO2.HRH
+//
+// Copyright (c) 1997-1999 Symbian Ltd.  All rights reserved.
+//
+
+// This file defines commands for use in the resource file and
+// in the C++ source file.
+
+enum
+	{
+	EExampleCmdFileName=100,
+
+	ECmdAddRule,
+	ECmdInsertRule,
+	ECmdEditRule,
+	ECmdDeleteRule,
+	ECmdMoveRuleDown,
+	ECmdMoveRuleUp,
+
+	ECmdConvertText,
+	ECmdConvertTextDebug,
+	ECmdRulesetOptions,
+
+	EEdwinRuleName,
+	EEdwinSearchFor,
+	EEdwinReplaceWith,
+	ECheckBoxMatchWholeWord,
+	ECheckBoxCaseSensitive,
+	ECheckBoxDoWhilePossible,
+
+	EEdwinRulesetDescription,
+	EChoiceListInEncoding,
+	EEdwinTrimTo,
+	EEdwinTrimFrom,
+	ECheckBoxParseHTML,
+	EChoiceListOutEncoding,
+	ECheckBoxConvertToTCR,
+
+	EProgressLabel,
+	EProgressBar
+	};

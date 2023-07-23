@@ -1,0 +1,123 @@
+# 1 ""
+ 
+ 
+ 
+ 
+# 1 "/Epoc32/Include/aiftool.rh" 1
+ 
+ 
+ 
+ 
+
+
+ 
+ 
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+ 
+ 
+ 
+
+STRUCT AIF_DATA
+	{
+	LONG app_uid;
+	 
+	WORD num_icons=0;  
+	 
+	LEN WORD STRUCT caption_list[];  
+	 
+	BYTE hidden= 0 ;
+	BYTE embeddability= 0 ;
+	BYTE newfile= 0 ;
+	 
+	LEN WORD STRUCT datatype_list[];  
+	}
+
+
+ 
+ 
+ 
+
+
+
+enum 
+	{
+	ELangTest,ELangEnglish,ELangFrench,ELangGerman,ELangSpanish,
+	ELangItalian,ELangSwedish,ELangDanish,ELangNorwegian,ELangFinnish,
+	ELangAmerican,ELangSwissFrench,ELangSwissGerman,ELangPortuguese,ELangTurkish,
+	ELangIcelandic,ELangRussian,ELangHungarian,ELangDutch,ELangBelgianFlemish,
+	ELangAustralian,ELangBelgianFrench,ELangAustrian,ELangNewZealand
+	};
+
+
+STRUCT CAPTION
+	{
+	BYTE code;
+	LTEXT caption(256 );
+	}
+
+ 
+ 
+ 
+
+
+
+enum
+	{
+	EDataTypePriorityHigh=10000,
+	EDataTypePriorityNormal=0,
+	EDataTypePriorityLow=-10000,
+	EDataTypePriorityLastResort=KMinTInt16
+	};
+
+STRUCT DATATYPE
+	{
+	WORD priority;
+	LTEXT8 type(256 );
+	}
+
+
+ 
+ 
+ 
+
+ 
+
+STRUCT MEMORY
+	{
+	LONG minheap;
+	LONG maxheap;
+	LONG stack;
+	}
+
+# 5 "" 2
+
+
+RESOURCE AIF_DATA
+	{
+	app_uid=0x101f7998;
+	 
+	caption_list=
+		{ 
+		CAPTION { code=ELangEnglish; caption="TxtConv"; }
+		};
+	 
+	num_icons=3;
+	 
+	embeddability= 0 ;
+	}
+

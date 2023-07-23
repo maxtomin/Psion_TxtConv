@@ -1,0 +1,34 @@
+
+c:\psiconv\TextConverter\aif>bmconv convmbm.lst 
+
+
+BMCONV version 50.
+Compiling...
+Multiple bitmap store type: File store
+Epoc file: TextConverter.mbm
+
+Bitmap file 1	: Icon24.bmp
+Bitmap file 2	: Icon24m.bmp
+Bitmap file 3	: Icon32.bmp
+Bitmap file 4	: Icon32m.bmp
+Bitmap file 5	: Icon48.bmp
+Bitmap file 6	: Icon48m.bmp
+Success.
+
+c:\psiconv\TextConverter\aif>cpp -I\Epoc32\Include\  0<TextConverter.rss 1>TextConverter.rpp 
+
+c:\psiconv\TextConverter\aif>rcomp -oTextConverter.rsc -hTextConverter.rsg -sTextConverter.rpp -iTextConverter.rss 
+
+
+c:\psiconv\TextConverter\aif>copy TextConverter.rsc temp\TextConverter.rsc 
+Скопировано файлов:         1.
+
+c:\psiconv\TextConverter\aif>copy TextConverter.mbm temp\TextConverter.mbm 
+Скопировано файлов:         1.
+
+c:\psiconv\TextConverter\aif>call \epoc32\release\winc\deb\aiftool.exe C:\psiconv\TextConverter\aif\Temp\ 
+Reading resource file...
+failed with code -1
+
+c:\psiconv\TextConverter\aif>copy Temp\out.aif TextConverter.aif 
+Не удается найти указанный файл.

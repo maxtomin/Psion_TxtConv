@@ -1,0 +1,20 @@
+// BOSSEMB.RSS
+//
+// Copyright (c) 1998 Symbian Ltd.  All rights reserved.
+//
+#include <aiftool.rh>
+
+RESOURCE AIF_DATA
+	{
+	app_uid=0x101f7998;
+	//
+	caption_list=
+		{ 
+		CAPTION { code=ELangEnglish; caption="TxtConv"; }
+		};
+	//
+	num_icons=3;
+	//
+	embeddability=KAppNotEmbeddable;
+	}
+
